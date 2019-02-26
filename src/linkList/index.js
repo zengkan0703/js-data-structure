@@ -50,7 +50,7 @@ class LinkList {
       this.head = node;
     } else {
       const nextNode = this.find(position);
-      if (nextNode !== -1) {
+      if (nextNode) {
         node.change(nextNode)
       }
       const prevNode = this.find(position - 1);
@@ -68,15 +68,12 @@ class LinkList {
     } else {
       const nextNode = this.find(position + 1);
       const prevNode =  this.find(position - 1);
-      const prev = prevNode === -1 ? this.head : prevNode;
-      const next = nextNode === -1 ? null : nextNode;
-      // console.log(prev, 'prev 55555')
-      // console.log(next, 'next 55555')
+      const prev = prevNode ? prevNode : this.head;
+      const next = nextNode ? nextNode : null;
       prev.next = next;
     }
     
     this.size --;
-    // console.log(this, 'this 55555555')
     this.parse()
   }
   check(position) {
@@ -100,7 +97,19 @@ class LinkList {
       currentIdx ++;
       current = current.next;
     }
-    return -1;
+    return null;
+  }
+  indexOf(value) {
+    let current = this.head;
+    let index = 0;
+    while(current) {
+      if (current.value === value) {
+        return index
+      }
+      current = current.next;
+      index++;
+    } 
+    return -1
   }
   parse() {
     let current = this.head;
@@ -114,22 +123,4 @@ class LinkList {
   }
 }
 
-const list1 = new LinkList([1,2,3])
-list1.append(4)
-// const position3 = list1.find(2);
-// const position4 = list1.find(4);
-// console.log(position3, 'position3 5555555')
-// console.log(position4, 'position4 5555555')
-list1.insert(0, '我是第一');
-list1.insert(5, '我是第六');
-list1.insert(3, '我是第三');
-
-list1.delete(0);
-list1.delete(2);
-list1.delete(4);
-
-const list2 = new LinkList();
-const position1 = list2.find(0);
-const position2 = list2.find(1);
-// console.log(position1, 'position1 5555555')
-// console.log(position2, 'position2 5555555')
+export default LinkList;

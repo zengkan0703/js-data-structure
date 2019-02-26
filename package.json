@@ -1,0 +1,26 @@
+{
+  "name": "js-data-structure",
+  "version": "1.0.0",
+  "description": "数据结构部分学习",
+  "private": true,
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zengkan0703/js-data-structure.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zengkan0703/js-data-structure/issues"
+  },
+  "homepage": "https://github.com/zengkan0703/js-data-structure#readme",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-jest": "^24.1.0",
+    "babel-loader": "^8.0.5",
+    "jest": "^24.1.0"
+  }
+}
