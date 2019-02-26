@@ -118,7 +118,6 @@ class LinkList {
       values.push(current.value);
       current = current.next;
     }
-    console.log(values, 'values ')
     return values;
   }
 }
