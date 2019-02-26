@@ -20,4 +20,8 @@ describe('链表', () => {
     list1.insert(2, 6);
     expect(list1.parse()).toEqual([5,2,6,3,4])
   })
+  test('update', () => {
+    list1.update(2, '我是第三个');
+    expect(list1.parse()).toEqual([5,2,'我是第三个',3,4])
+  })
 })

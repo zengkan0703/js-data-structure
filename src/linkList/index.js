@@ -99,6 +99,10 @@ class LinkList {
     }
     return null;
   }
+  update(position, value) {
+    const node = this.find(position);
+    node && node.change(value, 'value')
+  }
   indexOf(value) {
     let current = this.head;
     let index = 0;
