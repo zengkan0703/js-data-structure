@@ -26,6 +26,7 @@ class LinkList {
       }
       nodes.push(node)
     })
+    return nodes[nodes.length - 1]
   }
   append(val) {
     const node = new Node(val);
@@ -38,7 +39,7 @@ class LinkList {
     } else {
       this.head = node
     }
-    this.size ++
+    this.size ++;
   }
   insert(position, value) {
     const node = new Node(value);
@@ -62,19 +63,19 @@ class LinkList {
     if (!this.check(position)) {
       return
     }
+    if (position === this.size) {
+      return
+    }
     if (position === 0) {
       const node = this.find(1);
       this.head = node;
     } else {
       const nextNode = this.find(position + 1);
       const prevNode =  this.find(position - 1);
-      const prev = prevNode ? prevNode : this.head;
       const next = nextNode ? nextNode : null;
-      prev.next = next;
+      prevNode.next = next;
     }
-    
     this.size --;
-    this.parse()
   }
   check(position) {
     if (position > this.size) {
@@ -127,3 +128,4 @@ class LinkList {
 }
 
 export default LinkList;
+export { Node };
