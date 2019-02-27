@@ -1,5 +1,5 @@
 import LoopLinkList from './loop-link-list/index';
-import LinkList from './linkList';
+import LinkList from './link-list';
 import {ring, ring2, ring3} from './joseph-ring'
 
 window.LinkList = LinkList
