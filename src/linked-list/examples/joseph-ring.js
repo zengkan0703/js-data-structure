@@ -1,4 +1,4 @@
-import LoopLinkList from '../../index';
+import LoopLinkList from '../index';
 
 // 根据循环次数拿相对应的节点，循环次数从 1 开始
 const getNodeByLoopIdx = (loop, loopIdx) => {
