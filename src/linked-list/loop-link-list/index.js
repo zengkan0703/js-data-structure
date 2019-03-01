@@ -1,4 +1,4 @@
-import LinkList, { Node } from '../link-list';
+import LinkList, { Node } from '../index';
 
 export default class LoopLinkList extends LinkList {
   constructor(arr = []) {
