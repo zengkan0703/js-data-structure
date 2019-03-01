@@ -22,7 +22,7 @@ export default class Stack {
 	size() {
 		return this.items.length
 	}
-	print() {
+	toString() {
 		return this.items.toString();
 	}
 }
