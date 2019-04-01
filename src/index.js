@@ -1,3 +1,3 @@
-import { hanoiTower } from './stack/examples';
+import NQueen from './stack/examples/n-queen';
 
-hanoiTower(3)
+NQueen(3)
