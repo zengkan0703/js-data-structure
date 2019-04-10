@@ -1,3 +1,3 @@
-import NQueen from './stack/examples/n-queen';
+import Tree from './binary-tree/tree';
 
-NQueen(3)
+window.Tree = Tree
