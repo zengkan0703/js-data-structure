@@ -31,7 +31,25 @@ module.exports = {
         test: /\.(js|jsx|mjs)$/,
         use: 'babel-loader',
         exclude: /node_modules/
-      }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+       test: /\.(scss|sass)$/,
+       use: [
+        'style-loader',
+        'css-loader',
+        'sass-loader',
+       ]
+     },
     ]
+  },
+  resolve: {
+    extensions: ['.js', '.json', '.scss'],
   }
 }

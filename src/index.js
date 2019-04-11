@@ -1,3 +1,10 @@
-import Tree from './binary-tree/tree';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-window.Tree = Tree
+import Tree from './binary-tree';
+
+import './style.scss';
+
+ReactDOM.render((
+  <Tree/>
+),document.getElementById('app'))

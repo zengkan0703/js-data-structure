@@ -131,6 +131,36 @@ export default class Tree {
     this._travPost(node.right, callback);
     callback(node);
   }
+  //层次遍历
+  travLevel(callback) {
+    // this._travLevel(this.root, callback)
+    if (!this.root) {
+      return;
+    }
+    let arr = [];
+    let i = 0;
+    arr.push(this.root);
+    while(arr.length) {
+      callback(arr, i)
+      const newArr = [];
+      arr.map(n => {
+        n.left && newArr.push(n.left);
+        n.right && newArr.push(n.right);
+      })
+      arr = newArr;
+      i ++
+    }
+  }
+  _travLevel(node, callback) {
+    if (!node) {
+      return;
+    }
+    const arr = [];
+    arr.push(node, node.left, node.right);
+    arr.map(a => {
+      callback(a);
+    })
+  }
   //查找最小值
   findMin() {
     if (!this.root) {
@@ -187,6 +217,15 @@ export default class Tree {
       }
     }) 
     return leaves;
+  }
+  getBySth(key, value) {
+    const nodes = [];
+    this.travPre(d => {
+      if (d[key] === value) {
+        nodes.push(d)
+      }
+    }) 
+    return nodes;
   }
 }
 
