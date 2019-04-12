@@ -7,6 +7,8 @@ class Node {
     this.height = 1;
     this.size = 1;
     this.level = 1;
+    this.rightSize = 0;
+    this.leftSize = 0;
   }
 }
 
@@ -16,16 +18,21 @@ new Array(10).fill().map(d => parseInt(Math.random() * 100))
 export default class Tree {
   constructor(values) {
     this.root = null;
-    values.forEach(d => {
+    values && [...new Set(values)].forEach(d => {
       this.insert(d)
     })
   }
   insert(value) {
+    if (this.search(value)) {
+      console.log('重复');
+      return;
+    }
     const newNode = new Node(value);
     if (this.root === null) {
-      this.root = newNode
+      this.root = newNode;
+      return this.root;
     } else {
-      this._insert(this.root, newNode)
+      return this._insert(this.root, newNode)
     }
   }
   _insert(current, newNode) {
@@ -36,8 +43,9 @@ export default class Tree {
         current.left = newNode;
         this._updateHeight(newNode);
         this._updateSize(newNode);
+        return newNode;
       } else {
-        this._insert(current.left, newNode)
+        return this._insert(current.left, newNode)
       }
     } else {
       if (current.right === null) {
@@ -46,8 +54,9 @@ export default class Tree {
         current.right = newNode;
         this._updateHeight(newNode);
         this._updateSize(newNode);
+        return newNode;
       } else {
-        this._insert(current.right, newNode)
+        return this._insert(current.right, newNode)
       }
     }
   }
@@ -79,6 +88,8 @@ export default class Tree {
         break;
       }
       parent.size = size;
+      parent.leftSize = leftSize;
+      parent.rightSize = rightSize;
       node = parent;
     }
   }
@@ -136,7 +147,6 @@ export default class Tree {
   }
   //层次遍历
   travLevel(callback) {
-    // this._travLevel(this.root, callback)
     if (!this.root) {
       return;
     }
@@ -153,16 +163,6 @@ export default class Tree {
       arr = newArr;
       i ++
     }
-  }
-  _travLevel(node, callback) {
-    if (!node) {
-      return;
-    }
-    const arr = [];
-    arr.push(node, node.left, node.right);
-    arr.map(a => {
-      callback(a);
-    })
   }
   //查找最小值
   findMin() {
