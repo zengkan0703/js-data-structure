@@ -5,8 +5,6 @@ import Tree from '../tree';
 
 import './style';
 
-const UNIT_WIDTH = 30;
-const UNIT_HEIGHT = 40;
 const RADIUS = 15;
 
 export default class TreeEle extends Component {
@@ -57,11 +55,11 @@ export default class TreeEle extends Component {
         if (i === 0) {
           //根节点在中心
           n.cx = width / 2;
-          n.cy = UNIT_HEIGHT;
+          n.cy = RADIUS;
         } else {
           //各节点相对父级偏移，左节点偏移量为当前节点右子树的大小
-          n.cx = type === 'left' ? (parent.cx - UNIT_WIDTH * (n.rightSize + 1)) : (parent.cx + UNIT_WIDTH * (n.leftSize + 1) );
-          n.cy = parent.cy + UNIT_HEIGHT * 2;
+          n.cx = type === 'left' ? (parent.cx - RADIUS * 1.5 * (n.rightSize + 1)) : (parent.cx + RADIUS * 1.5 * (n.leftSize + 1) );
+          n.cy = parent.cy + RADIUS * 4;
         }
         if (n.cx < 50 || n.cx > (width - 50) || n.cy > height) {
           this.pause();
