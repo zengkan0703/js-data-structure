@@ -1,35 +1,22 @@
 .tree {
   position: absolute;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  // .cell {
-  //   width: 50px;
-  //   height: 50px;
-  //   border: 1px dashed #ccc;
-  //   display: inline-block;
-  //   vertical-align: middle;
-  // }
-  // .block {
-  //   border: 1px solid #000;
-  //   position: absolute;
-  //   text-align: center;
-  //   line-height: 50px;
-  // }
-  div:after{
+  transform: translate(-50%);
+  .node:after{
     content:"";
     display: block;
     clear: both;
   }
-  div {
+  .node {
     border: 1px solid #000;
     border-bottom: 0;
     background: #ccc;
     .value {
       position: absolute;
-      left: 50%;
+      width: 100%;
+      text-align: center;
       top: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateY(-50%);
     }
   }
   .root {

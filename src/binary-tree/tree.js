@@ -5,7 +5,8 @@ class Node {
     this.right = right;
     this.parent = parent;
     this.height = 1;
-    this.size = 0;
+    this.size = 1;
+    this.level = 1;
   }
 }
 
@@ -31,6 +32,7 @@ export default class Tree {
     if (current.value > newNode.value) {
       if (current.left === null) {
         newNode.parent = current;
+        newNode.level = current.level + 1;
         current.left = newNode;
         this._updateHeight(newNode);
         this._updateSize(newNode);
@@ -40,6 +42,7 @@ export default class Tree {
     } else {
       if (current.right === null) {
         newNode.parent = current;
+        newNode.level = current.level + 1;
         current.right = newNode;
         this._updateHeight(newNode);
         this._updateSize(newNode);
@@ -69,9 +72,9 @@ export default class Tree {
       const parent = node.parent;
       const left = parent.left;
       const right = parent.right;
-      const leftSize = left ? left.size + 1 : 0;
-      const rightSize = right ? right.size + 1 : 0;
-      const size = leftSize + rightSize;
+      const leftSize = left ? left.size : 0;
+      const rightSize = right ? right.size : 0;
+      const size = leftSize + rightSize + 1;
       if (size === parent.size) {
         break;
       }
@@ -197,7 +200,7 @@ export default class Tree {
   _search(node, value) {
     if (!node) {
       console.log('没有相应的值')
-      return 
+      return null;
     }
     if (node.value === value) {
       return node

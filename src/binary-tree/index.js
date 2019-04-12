@@ -8,9 +8,6 @@ export default class TreeEle extends Component {
   constructor(props){
     super(props);
     this.tree = new Tree(new Array(10).fill().map(d => parseInt(Math.random() * 100)));
-    // this.tree.travLevel((arr, i) => {
-    //   arr.map(d => d.level = i)
-    // })
     this.renderEle = this.renderEle.bind(this);
   }
   renderEle() {
@@ -18,14 +15,14 @@ export default class TreeEle extends Component {
     const loop = (node, type) => {
       i ++;
       return (
-        <div className="node" key={i} className={type} style={{
-          width: (node.size + 1) * 50,
+        <div className={`node ${type}`} key={i} style={{
+          width: node.size * 50,
           height: 100
         }}>
           {
             node.left && loop(node.left, 'left')
           }
-          <span className="value">{node.value}</span>
+          <span className="value">{`值: ${node.value}/高: ${node.height}/大小: ${node.size}/层级:${node.level}`}</span>
           {
             node.right && loop(node.right, 'right')
           }
@@ -36,7 +33,6 @@ export default class TreeEle extends Component {
   }
   render() {
     const { size, height } = this.tree.root;
-    console.log(this.tree, 'this.tree 5555555')
     window.tree = this.tree;
     return (
       <div 
@@ -46,32 +42,6 @@ export default class TreeEle extends Component {
           height: height * 50
         }}
       >
-        {
-          // new Array(height).fill().map((h, i, all) => {
-          //   const nodes = this.tree.getBySth('height', all.length - i);
-          //   const eles = [];
-          //   new Array(size).fill().map((s, j) => {
-          //     eles.push(
-          //       <div className="cell" key={`${i}${j}`}></div>
-          //     )
-          //   })
-          //   nodes.map(n => {
-          //     eles.push(
-          //       <div 
-          //         className="block"
-          //         style={{
-          //           width: n.size * 50,
-          //           height: 50,
-          //           top: i * 50
-          //         }}
-          //       >
-          //         {n.value}
-          //       </div>
-          //     )
-          //   })
-          //   return eles;
-          // })
-        }
         {
           this.renderEle()
         }
