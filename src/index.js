@@ -6,5 +6,5 @@ import Tree from './binary-tree/example/demo';
 import './style.scss';
 
 ReactDOM.render((
-  <Tree lineType="ployine"/>
+  <Tree/>
 ),document.getElementById('app'))

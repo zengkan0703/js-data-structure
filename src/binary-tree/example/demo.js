@@ -10,6 +10,9 @@ const UNIT_HEIGHT = 40;
 const RADIUS = 15;
 
 export default class TreeEle extends Component {
+  static defaultProps = {
+    lineType: 'straight'
+  }
   constructor(props){
     super(props);
     this.zr = null;
@@ -20,7 +23,7 @@ export default class TreeEle extends Component {
     this.start();
   }
   start = () => {
-    this.interval = setInterval(this.add, 100)
+    this.interval = setInterval(this.add, 20)
   }
   pause = () => {
     clearInterval(this.interval);
@@ -46,6 +49,7 @@ export default class TreeEle extends Component {
     const { lineType } = this.props;
     this.zr.clear();
     const width = this.zr.getWidth();
+    const height = this.zr.getHeight();
     this.tree.travLevel((nodes, i) => {
       nodes.map(n => {
         const parent = n.parent;
@@ -58,6 +62,9 @@ export default class TreeEle extends Component {
           //各节点相对父级偏移，左节点偏移量为当前节点右子树的大小
           n.cx = type === 'left' ? (parent.cx - UNIT_WIDTH * (n.rightSize + 1)) : (parent.cx + UNIT_WIDTH * (n.leftSize + 1) );
           n.cy = parent.cy + UNIT_HEIGHT * 2;
+        }
+        if (n.cx < 50 || n.cx > (width - 50) || n.cy > height) {
+          this.pause();
         }
         const circle = new zrender.Circle({
           shape: {
