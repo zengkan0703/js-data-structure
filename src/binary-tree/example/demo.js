@@ -43,6 +43,23 @@ export default class TreeEle extends Component {
       this.start();
     }
   }
+  //获取起点终点连线的参数
+  getLineParams = (start, end) => {
+    //y = kx + b;
+    const k = (start[0] - end[0]) / (start[1] - end[1]);
+    const b = start[1] - k * start[0];
+    const angle = Math.atan(-k);
+    return { k, b, angle };
+  }
+  //起点终点落在圆的周围
+  getStartEnd = (start, end) => {
+    const {angle } = this.getLineParams(start, end);
+    const realStartX = start[0] - Math.sin(angle) * RADIUS;
+    const realStartY = start[1] + Math.cos(angle) * RADIUS;
+    const realEndX = end[0] +  Math.sin(angle) * RADIUS;
+    const realEndY = end[1] -  Math.cos(angle) * RADIUS;
+    return [[realStartX, realStartY], [realEndX, realEndY]];
+  }
   draw = () => {
     const { lineType } = this.props;
     this.zr.clear();
@@ -59,7 +76,7 @@ export default class TreeEle extends Component {
         } else {
           //各节点相对父级偏移，左节点偏移量为当前节点右子树的大小
           n.cx = type === 'left' ? (parent.cx - RADIUS * 1.5 * (n.rightSize + 1)) : (parent.cx + RADIUS * 1.5 * (n.leftSize + 1) );
-          n.cy = parent.cy + RADIUS * 4;
+          n.cy = parent.cy + RADIUS * 6;
         }
         if (n.cx < 50 || n.cx > (width - 50) || n.cy > height) {
           this.pause();
@@ -70,7 +87,6 @@ export default class TreeEle extends Component {
           },
           style: {
             fill:  type === 'left' ? 'red' : '#000',
-            stroke: '#000',
             text: `${n.value}`,
             textFill: '#fff'
           }
@@ -87,7 +103,7 @@ export default class TreeEle extends Component {
         const middleY = startY;
         const line = new zrender.Polyline({
           shape: {
-            points: lineType === 'straight' ? [[startX, startY], [endX, endY]] : [[startX, startY], [middleX, middleY], [endX, endY]],
+            points: lineType === 'straight' ? this.getStartEnd([startX, startY], [endX, endY]) : [[startX, startY], [middleX, middleY], [endX, endY]],
             smooth: 0
           },
           style: {
