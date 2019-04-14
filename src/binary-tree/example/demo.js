@@ -15,6 +15,9 @@ export default class TreeEle extends Component {
     super(props);
     this.zr = null;
     this.tree = new Tree([500]);
+    this.state = {
+      values: []
+    }
   }
   componentDidMount() {
     this.zr = zrender.init(this.treeEle);   
@@ -27,21 +30,18 @@ export default class TreeEle extends Component {
     clearInterval(this.interval);
     this.interval = null
   }
-  handleReset = () => {
+  handleClear = () => {
     this.pause();
-    this.tree = new Tree([500]);  
-    this.start();
+    this.tree = new Tree(); 
+    this.draw(); 
   }
   add = () => {
     this.tree.insert(parseInt(Math.random() * 1000));
     this.draw();
   }
-  handleClick = () => {
-    if (this.interval) {
-      this.pause();
-    } else {
-      this.start();
-    }
+  handleCreate = () => {
+    this.handleClear();
+    this.start();
   }
   //获取起点终点连线的参数
   getLineParams = (start, end) => {
@@ -114,14 +114,34 @@ export default class TreeEle extends Component {
       })
     })
   }
+  updateValues = (values) => {
+    return new Promise((resolve, reject) => {
+      this.setState({
+        values
+      }, resolve )
+    })
+  }
+  travPre = async () => {
+    this.tree.travPre((node) => {
+      await this.updateValues([...this.state.values, node.value])
+    })
+  }
   render() {
-    return [
-      <div className="tree" ref={r => this.treeEle = r}/>,
-      <div className="btn">
-        <span onClick={this.handleClick}>暂停</span>
-        <span onClick={this.handleReset}>重置</span>
-        <span onClick={this.add}>加1</span>
+    const { values } = this.state;
+    console.log(values, 'values 5555')
+    return (
+      <div className="container">
+        <div className="tree" ref={r => this.treeEle = r}/>
+        <div className="btn left">
+          <span onClick={this.travPre}>先序遍历</span>  
+        </div>
+        <div className="btn right">
+          <span onClick={this.handleCreate}>随机生成</span>
+          <span onClick={this.handleClear}>清空</span>
+          <span onClick={this.add}>随机加1</span>
+        </div>
+        <div className="values">{values.join()}</div>
       </div>
-    ]
+    )
   }
 }
