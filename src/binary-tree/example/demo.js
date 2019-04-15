@@ -15,6 +15,7 @@ export default class TreeEle extends Component {
     super(props);
     this.zr = null;
     this.tree = new Tree([500]);
+    this.clear = false;
     this.state = {
       values: []
     }
@@ -31,6 +32,7 @@ export default class TreeEle extends Component {
     this.interval = null
   }
   handleClear = () => {
+    this.clear = true;
     this.pause();
     this.tree = new Tree(); 
     this.draw(); 
@@ -156,7 +158,9 @@ export default class TreeEle extends Component {
       const nodes = [];
       this.tree[type](node => nodes.push(node))
       for (let i = 0, length = nodes.length; i < length; i++) {
-        await this.updateValues(nodes[i])
+        if (!this.clear) {
+          await this.updateValues(nodes[i])
+        }
       }
     })
   }
