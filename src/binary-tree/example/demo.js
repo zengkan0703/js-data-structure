@@ -34,6 +34,9 @@ export default class TreeEle extends Component {
     this.pause();
     this.tree = new Tree(); 
     this.draw(); 
+    this.setState({
+      values: []
+    })
   }
   add = () => {
     this.tree.insert(parseInt(Math.random() * 1000));
@@ -86,9 +89,11 @@ export default class TreeEle extends Component {
             cx: n.cx, cy: n.cy, r: RADIUS
           },
           style: {
-            fill:  type === 'left' ? 'red' : '#000',
+            // fill:  type === 'left' ? 'red' : '#000',
+            fill: 'transparent',
             text: `${n.value}`,
-            textFill: '#fff'
+            textFill: '#000',
+            stroke: '#000'
           }
         })
         this.zr.add(circle);
@@ -114,31 +119,61 @@ export default class TreeEle extends Component {
       })
     })
   }
-  updateValues = (values) => {
-    return new Promise((resolve, reject) => {
-      this.setState({
-        values
-      }, resolve )
+  highLightNode = (nodes) => {
+    nodes = Array.isArray(nodes) ? nodes : [nodes];
+    nodes.map(node => {
+      const circle = new zrender.Circle({
+        shape: {
+          cx: node.cx, cy: node.cy, r: RADIUS + 5
+        },
+        style: {
+          fill:  '#23c132',
+          text: `${node.value}`,
+        }
+      })
+      circle.animateTo({
+        shape: {
+          cx: node.cx, cy: node.cy, r: 0
+        }
+      }, 300, 200)
+      this.zr.add(circle);
+    })
+  }  
+  updateValues = (node) => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.highLightNode(node)
+        this.setState((state) => ({
+          values: [...state.values, ...(Array.isArray(node) ? node.map(d => d.value) : [node.value])]
+        }), resolve)
+      }, 300)
     })
   }
-  travPre = async () => {
-    this.tree.travPre((node) => {
-      await this.updateValues([...this.state.values, node.value])
+  trav = (type) => {
+    this.setState({
+      values: []
+    }, async () => {
+      const nodes = [];
+      this.tree[type](node => nodes.push(node))
+      for (let i = 0, length = nodes.length; i < length; i++) {
+        await this.updateValues(nodes[i])
+      }
     })
   }
   render() {
     const { values } = this.state;
-    console.log(values, 'values 5555')
     return (
       <div className="container">
         <div className="tree" ref={r => this.treeEle = r}/>
-        <div className="btn left">
-          <span onClick={this.travPre}>先序遍历</span>  
-        </div>
-        <div className="btn right">
+        <div className="btn">
           <span onClick={this.handleCreate}>随机生成</span>
           <span onClick={this.handleClear}>清空</span>
           <span onClick={this.add}>随机加1</span>
+
+          <span onClick={() => this.trav('travPre')}>先序遍历</span>  
+          <span onClick={() => this.trav('travIn')}>中序遍历</span>  
+          <span onClick={() => this.trav('travPost')}>后序遍历</span>  
+          <span onClick={() => this.trav('travLevel')}>层级遍历</span>  
         </div>
         <div className="values">{values.join()}</div>
       </div>

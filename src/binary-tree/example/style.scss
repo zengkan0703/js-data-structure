@@ -10,14 +10,10 @@
     position: absolute;
     top: 50%;
     font-size: 14px;
-    &.right {
-      right: 0;
-    }
-    &.left {
-      left: 0;
-    }
+    transform: translateY(-50%);
+    right: 0;
     span {
-      display: inline-block;
+      display: block;
       padding: 10px 20px;
       color: #fff;
       background: #23c132;
@@ -25,12 +21,15 @@
       margin-left: 10px;
       cursor: pointer;
       user-select: none;
+      margin: 10px;
     }
   }
   .values {
     position: absolute;
     bottom: 10px;
     width: 100%;
+    padding: 0 50px;
+    word-break: break-all;
     text-align: center;
   }
 }
