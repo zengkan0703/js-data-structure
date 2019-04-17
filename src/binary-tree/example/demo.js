@@ -41,6 +41,9 @@ export default class TreeEle extends Component {
     })
   }
   add = () => {
+    if (this.clear) {
+      this.clear = false
+    }
     this.tree.insert(parseInt(Math.random() * 1000));
     this.draw();
   }
