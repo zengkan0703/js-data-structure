@@ -1,5 +1,5 @@
 //数组去重
-//时间复杂度 
+//时间复杂度 n * (n + 2) = O(n^2)
 const deduplicate = (arr) => {
   return arr.reduce((p, n) => {
     if (!p.find(a => a === n)) {
