@@ -1,6 +1,6 @@
 class Vertex {
-  constructor(data) {
-    this.data = data;
+  constructor(key) {
+    this.key = key;
     this.inDegree = 0;
     this.outDegree = 0;
     this.status = 'UNDISCOVERED';
@@ -8,8 +8,8 @@ class Vertex {
 }
 //用邻接矩阵实现的图
 class Edge {
-  constructor(data, weight = 0) {
-    this.data = data;
+  constructor(key, weight = 0) {
+    this.key = key;
     this.weight = weight;
     this.status = 'UNDETERMINED';
   }
@@ -23,8 +23,8 @@ export default class Graph {
   _reset () {
 
   }
-  insertVertex (data) {
-    const vertex = new Vertex(data);
+  insertVertex (key) {
+    const vertex = new Vertex(key);
     this.edges.push(this.vertexs.map(v => null));
     this.edges.map(e => {
       e.push(null)
@@ -55,7 +55,7 @@ export default class Graph {
       return false;
     }
   }
-  insertEdge (data, weight, i, j) {
+  insertEdge (key, weight, i, j) {
     if (this.exist(i, j)) {
       return;
     }
@@ -63,7 +63,7 @@ export default class Graph {
     if (i > length || j > length) {
       return;
     }
-    this.edges[i][j] = new Edge(data, weight);
+    this.edges[i][j] = new Edge(key, weight);
     this.vertexs[i].outDegree ++;
     this.vertexs[j].inDegree ++;
   }

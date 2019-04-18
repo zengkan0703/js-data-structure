@@ -84,9 +84,9 @@ export default class AdjacencyMatrix extends Component {
                 let content;
                 const isVertex = (i === 0 || j === 0) && !(i === 0 && j === 0);
                 if (i === 0) {
-                  content = v2 ? v2.data : 0
+                  content = v2 ? v2.key : 0
                 } else if (j === 0) {
-                  content = v1 ? v1.data : 0
+                  content = v1 ? v1.key : 0
                 } else {
                   content = graph.exist(i - 1, j - 1) ? edges[i - 1][j - 1].weight : ''
                 }
