@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Tree from './binary-tree/example/demo';
+import AdjacencyMatrix from './graph';
 
+import 'antd/dist/antd.css'; 
 import './style.scss';
 
 ReactDOM.render((
-  <Tree/>
+  <AdjacencyMatrix/>
 ),document.getElementById('app'))

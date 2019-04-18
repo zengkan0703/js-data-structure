@@ -15,7 +15,7 @@ class Edge {
   }
 }
 
-class Graph {
+export default class Graph {
   constructor() {
     this.vertexs = [];
     this.edges = [];
@@ -60,7 +60,7 @@ class Graph {
       return;
     }
     const length = this.vertexs.length;
-    if (i < length || j < length) {
+    if (i > length || j > length) {
       return;
     }
     this.edges[i][j] = new Edge(data, weight);
@@ -72,10 +72,11 @@ class Graph {
       return;
     }
     const length = this.vertexs.length;
-    if (i < length || j < length) {
+    if (i > length || j > length) {
       return;
     }
     this.edges[i][j] = null;
-    
+    this.vertexs[i].outDegree --;
+    this.vertexs[j].inDegree --;
   }
 }
