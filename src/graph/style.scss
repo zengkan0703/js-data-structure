@@ -23,7 +23,7 @@
     &>div {
       display: flex;
       justify-content: space-between;
-      .ant-btn {
+      .ant-btn span{
         color: #fff;
       }
       &>* {

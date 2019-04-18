@@ -82,6 +82,7 @@ export default class AdjacencyMatrix extends Component {
             [void(0), ...vertexs].map((v1, i) => {
               return [void(0), ...vertexs].map((v2, j) => {
                 let content;
+                const isVertex = (i === 0 || j === 0) && !(i === 0 && j === 0);
                 if (i === 0) {
                   content = v2 ? v2.data : 0
                 } else if (j === 0) {
@@ -90,7 +91,10 @@ export default class AdjacencyMatrix extends Component {
                   content = graph.exist(i - 1, j - 1) ? edges[i - 1][j - 1].weight : ''
                 }
                 return (
-                  <div className="cell" key={`${i}${j}`}>{content}</div>
+                  <div className="cell" key={`${i}${j}`} style={{
+                    color: isVertex ? '#fff' : '#333',
+                    background: isVertex ? '#000' : '#fff',
+                  }}>{content}</div>
                 )
               })
             })
