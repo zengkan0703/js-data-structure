@@ -71,6 +71,7 @@ export default class AdjacencyMatrix extends Component {
   render() {
     const { graph } = this.state;
     const { vertexs, edges } = graph;
+    const { addVerData, addEdgeIdx1, addEdgeIdx2, reVerIdx, reEdgeIdx1, reEdgeIdx2 } = this.state;
     return (
       <div className="adjacency-matric">
         <h2 className="title">邻接矩阵表示图</h2>
@@ -97,21 +98,21 @@ export default class AdjacencyMatrix extends Component {
         </div>
         <div className="action">
           <div>
-            <Input placeholder="顶点名称" onChange={(e) => this.handleInput(e.target.value, 'addVerData')}/>
+            <Input placeholder="顶点名称" value={addVerData} onChange={(e) => this.handleInput(e.target.value, 'addVerData')}/>
             <Button type="primary" onClick={this.handleAddVertex}>添加顶点</Button>
           </div>
           <div>
-            <InputNumber placeholder="起始点索引" min={0} max={vertexs.length - 1}  onChange={(value) => this.handleInput(value, 'addEdgeIdx1')}/>
-            <InputNumber placeholder="终止点索引" min={0} max={vertexs.length - 1}  onChange={(value) => this.handleInput(value, 'addEdgeIdx2')}/>
+            <InputNumber placeholder="起始点索引" min={0} max={vertexs.length - 1} value={addEdgeIdx1} onChange={(value) => this.handleInput(value, 'addEdgeIdx1')}/>
+            <InputNumber placeholder="终止点索引" min={0} max={vertexs.length - 1} value={addEdgeIdx2} onChange={(value) => this.handleInput(value, 'addEdgeIdx2')}/>
             <Button type="primary" onClick={this.handleAddEdge}>添加边</Button>
           </div>
           <div>
-            <InputNumber placeholder="顶点索引" min={0} max={vertexs.length - 1}  onChange={(value) => this.handleInput(value, 'reVerIdx')}/>
+            <InputNumber placeholder="顶点索引" min={0} max={vertexs.length - 1}  value={reVerIdx} onChange={(value) => this.handleInput(value, 'reVerIdx')}/>
             <Button type="primary" onClick={this.handleRemoveVertext}>删除顶点</Button>
           </div>
           <div>
-            <InputNumber placeholder="起始点索引" min={0} max={vertexs.length - 1}  onChange={(value) => this.handleInput(value, 'reEdgeIdx1')}/>
-            <InputNumber placeholder="终止点索引" min={0} max={vertexs.length - 1}  onChange={(value) => this.handleInput(value, 'reEdgeIdx2')}/>
+            <InputNumber placeholder="起始点索引" min={0} max={vertexs.length - 1} value={reEdgeIdx1} onChange={(value) => this.handleInput(value, 'reEdgeIdx1')}/>
+            <InputNumber placeholder="终止点索引" min={0} max={vertexs.length - 1} value={reEdgeIdx2} onChange={(value) => this.handleInput(value, 'reEdgeIdx2')}/>
             <Button type="primary" onClick={this.handleRemoveEdge}>删除边</Button>
           </div>
         </div>
