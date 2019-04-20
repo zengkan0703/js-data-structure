@@ -36,37 +36,45 @@ export default class AdjacencyMatrix extends Component {
   }
   handleAddVertex = () => {
     const { graph, addVerData } = this.state;
-    graph.insertVertex(addVerData);
-    this.setState({
-      graph,
-      addVerData: void 0
-    })
+    if (addVerData !== void 0) {
+      graph.insertVertex(addVerData);
+      this.setState({
+        graph,
+        addVerData: void 0
+      })
+    }
   }
   handleAddEdge = () => {
     const { graph, addEdgeIdx1, addEdgeIdx2 } = this.state;
-    graph.insertEdge('边', 1, addEdgeIdx1, addEdgeIdx2);
-    this.setState({
-      graph,
-      addEdgeIdx1: void 0,
-      addEdgeIdx2: void 0,
-    })
+    if (addEdgeIdx1 !== void 0 && addEdgeIdx2 !== void 0) {
+      graph.insertEdge('边', 1, addEdgeIdx1, addEdgeIdx2);
+      this.setState({
+        graph,
+        addEdgeIdx1: void 0,
+        addEdgeIdx2: void 0,
+      })
+    }
   }
   handleRemoveVertext = () => {
     const { graph, reVerIdx } = this.state;
-    graph.removeVertex(reVerIdx);
-    this.setState({
-      graph,
-      reVerIdx: void 0
-    })
+    if (reVerIdx !== void 0) {
+      graph.removeVertex(reVerIdx);
+      this.setState({
+        graph,
+        reVerIdx: void 0
+      })
+    }
   }
   handleRemoveEdge = () => {
     const { graph, reEdgeIdx1, reEdgeIdx2 } = this.state;
-    graph.removeEdge(reEdgeIdx1, reEdgeIdx2);
-    this.setState({
-      graph,
-      reEdgeIdx1: void 0,
-      reEdgeIdx2: void 0,
-    })
+    if (reEdgeIdx1 !== void 0 && reEdgeIdx2 !== void 0) {
+      graph.removeEdge(reEdgeIdx1, reEdgeIdx2);
+      this.setState({
+        graph,
+        reEdgeIdx1: void 0,
+        reEdgeIdx2: void 0,
+      })
+    }
   }
   render() {
     const { graph } = this.state;
