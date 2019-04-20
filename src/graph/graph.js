@@ -6,7 +6,6 @@ class Vertex {
     this.status = 'UNDISCOVERED';
   }
 }
-//用邻接矩阵实现的图
 class Edge {
   constructor(key, weight = 0) {
     this.key = key;
@@ -16,6 +15,68 @@ class Edge {
 }
 
 export default class Graph {
+  constructor() {
+    this.vertexs = [];
+  }
+  insertVertex(key) {
+    if (this.vertexs.find(d => d.key === key)) {
+      return false;
+    }
+    const vertex = new Vertex(key);
+    vertex.edges = [];
+    this.vertexs.push(vertex);
+    return vertex;
+  }
+  removeVertex(key) {
+    this.vertexs = this.vertexs.filter(d => d.key !== key);
+    this.vertexs.map(d => {
+      d.edges = d.edges.filter(e => e.target !== key);
+      if (d.edges.find(e => e.target === key)) {
+        d.outDegree --;
+      }
+    })
+  }
+  findEdge(i, j) {
+    try {
+      return this.vertexs.find(v => v.key === i).edges.find(e => e.target === j);
+    } catch (error) {
+      return false
+    }
+  }
+  insertEdge(key, weight, i, j) {
+    if (this.findEdge(i, j)) {
+      return false;
+    }
+    const start = this.vertexs.find(v => v.key === i);
+    const target = this.vertexs.find(v => v.key === j);
+    if (! start || ! target) {
+      return false;
+    }
+    start.outDegree ++;
+    target.inDegree ++;
+    const edge = new Edge(key, weight);
+    edge.target = j;
+    start.edges.push(edge);
+    return edge;
+  }
+  removeEdge(i, j) {
+    if (!this.findEdge(i, j)) {
+      return false;
+    }
+    const start = this.vertexs.find(v => v.key === i);
+    const target = this.vertexs.find(v => v.key === j);
+    if (! start || ! target) {
+      return false;
+    }
+    start.outDegree --;
+    target.inDegree --;
+    start.edges = start.edges.filter(e => e.target !== 'j');
+    return start;
+  }
+}
+
+//用邻接矩阵实现的图
+class Graph2 {
   constructor() {
     this.vertexs = [];
     this.edges = [];

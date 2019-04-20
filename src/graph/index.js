@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Input, InputNumber, Button } from 'antd';
+import { Input, Button, message } from 'antd';
 
 import Graph from './graph';
 
@@ -15,74 +15,82 @@ export default class AdjacencyMatrix extends Component {
     graph.insertVertex('C');
     graph.insertVertex('D');
 
-    graph.insertEdge('edge1', 1, 0, 1);
-    graph.insertEdge('edge2', 1, 0, 3);
-    graph.insertEdge('edge3', 1, 2, 3);
-    graph.insertEdge('edge4', 1, 3, 1);
+    graph.insertEdge('edge1', 1, 'A', 'B');
+    graph.insertEdge('edge2', 1, 'C', 'D');
+    graph.insertEdge('edge3', 1, 'B', 'C');
+    graph.insertEdge('edge4', 1, 'A', 'D');
     this.state = {
       graph,
-      addVerData: void 0,
-      addEdgeIdx1: void 0,
-      addEdgeIdx2: void 0,
-      reVerIdx: void 0,
-      reEdgeIdx1: void 0,
-      reEdgeIdx2: void 0,
+      addVerKey: void 0,
+      addEdgeStart: void 0,
+      addEdgeTarget: void 0,
+      reVerKey: void 0,
+      reEdgeStart: void 0,
+      reEdgeTarget: void 0,
     }
   }
-  handleInput = (value, type) => {
+  handleInput = (e, type) => {
     this.setState({
-      [type]: value
+      [type]: e.target.value
     })
   }
   handleAddVertex = () => {
-    const { graph, addVerData } = this.state;
-    if (addVerData !== void 0) {
-      graph.insertVertex(addVerData);
+    const { graph, addVerKey } = this.state;
+    if (addVerKey !== void 0) {
+      graph.insertVertex(addVerKey);
       this.setState({
         graph,
-        addVerData: void 0
+        addVerKey: void 0
       })
     }
   }
   handleAddEdge = () => {
-    const { graph, addEdgeIdx1, addEdgeIdx2 } = this.state;
-    if (addEdgeIdx1 !== void 0 && addEdgeIdx2 !== void 0) {
-      graph.insertEdge('边', 1, addEdgeIdx1, addEdgeIdx2);
+    const { graph, addEdgeStart, addEdgeTarget } = this.state;
+    if (addEdgeStart !== void 0 && addEdgeTarget !== void 0) {
+      const success = graph.insertEdge('边', 1, addEdgeStart, addEdgeTarget);
+      if (!success) {
+        message.error('请输入正确的顶点');
+        return ;
+      }
       this.setState({
         graph,
-        addEdgeIdx1: void 0,
-        addEdgeIdx2: void 0,
+        addEdgeStart: void 0,
+        addEdgeTarget: void 0,
       })
     }
   }
   handleRemoveVertext = () => {
-    const { graph, reVerIdx } = this.state;
-    if (reVerIdx !== void 0) {
-      graph.removeVertex(reVerIdx);
+    const { graph, reVerKey } = this.state;
+    if (reVerKey !== void 0) {
+      graph.removeVertex(reVerKey);
       this.setState({
         graph,
-        reVerIdx: void 0
+        reVerKey: void 0
       })
     }
   }
   handleRemoveEdge = () => {
-    const { graph, reEdgeIdx1, reEdgeIdx2 } = this.state;
-    if (reEdgeIdx1 !== void 0 && reEdgeIdx2 !== void 0) {
-      graph.removeEdge(reEdgeIdx1, reEdgeIdx2);
+    const { graph, reEdgeStart, reEdgeTarget } = this.state;
+    if (reEdgeStart !== void 0 && reEdgeTarget !== void 0) {
+      const success = graph.removeEdge(reEdgeStart, reEdgeTarget);
+      if (!success) {
+        message.error('请输入正确的顶点');
+        return ;
+      }
       this.setState({
         graph,
-        reEdgeIdx1: void 0,
-        reEdgeIdx2: void 0,
+        reEdgeStart: void 0,
+        reEdgeTarget: void 0,
       })
     }
   }
   render() {
     const { graph } = this.state;
-    const { vertexs, edges } = graph;
-    const { addVerData, addEdgeIdx1, addEdgeIdx2, reVerIdx, reEdgeIdx1, reEdgeIdx2 } = this.state;
+    const { vertexs } = graph;
+    const { addVerKey, addEdgeStart, addEdgeTarget, reVerKey, reEdgeStart, reEdgeTarget } = this.state;
     return (
       <div className="adjacency-matric">
-        <h2 className="title">邻接矩阵表示图</h2>
+        <h2 className="title">邻接表--表示图</h2>
         <div className="matrix" style={{
           width: (vertexs.length + 1) * 50
         }}>
@@ -96,7 +104,8 @@ export default class AdjacencyMatrix extends Component {
                 } else if (j === 0) {
                   content = v1 ? v1.key : 0
                 } else {
-                  content = graph.exist(i - 1, j - 1) ? edges[i - 1][j - 1].weight : ''
+                  const edge = graph.findEdge(v1.key, v2.key);
+                  content = edge ? edge.weight : ''
                 }
                 return (
                   <div className="cell" key={`${i}${j}`} style={{
@@ -110,21 +119,21 @@ export default class AdjacencyMatrix extends Component {
         </div>
         <div className="action">
           <div>
-            <Input placeholder="顶点名称" value={addVerData} onChange={(e) => this.handleInput(e.target.value, 'addVerData')}/>
+            <Input placeholder="顶点名称" value={addVerKey} onChange={(e) => this.handleInput(e, 'addVerKey')}/>
             <Button type="primary" onClick={this.handleAddVertex}>添加顶点</Button>
           </div>
           <div>
-            <InputNumber placeholder="起始点索引" min={0} max={vertexs.length - 1} value={addEdgeIdx1} onChange={(value) => this.handleInput(value, 'addEdgeIdx1')}/>
-            <InputNumber placeholder="终止点索引" min={0} max={vertexs.length - 1} value={addEdgeIdx2} onChange={(value) => this.handleInput(value, 'addEdgeIdx2')}/>
+            <Input placeholder="起始点" value={addEdgeStart} onChange={(e) => this.handleInput(e, 'addEdgeStart')}/>
+            <Input placeholder="终止点" value={addEdgeTarget} onChange={(e) => this.handleInput(e, 'addEdgeTarget')}/>
             <Button type="primary" onClick={this.handleAddEdge}>添加边</Button>
           </div>
           <div>
-            <InputNumber placeholder="顶点索引" min={0} max={vertexs.length - 1}  value={reVerIdx} onChange={(value) => this.handleInput(value, 'reVerIdx')}/>
+            <Input placeholder="顶点名称"  value={reVerKey} onChange={(e) => this.handleInput(e, 'reVerKey')}/>
             <Button type="primary" onClick={this.handleRemoveVertext}>删除顶点</Button>
           </div>
           <div>
-            <InputNumber placeholder="起始点索引" min={0} max={vertexs.length - 1} value={reEdgeIdx1} onChange={(value) => this.handleInput(value, 'reEdgeIdx1')}/>
-            <InputNumber placeholder="终止点索引" min={0} max={vertexs.length - 1} value={reEdgeIdx2} onChange={(value) => this.handleInput(value, 'reEdgeIdx2')}/>
+            <Input placeholder="起始点" value={reEdgeStart} onChange={(e) => this.handleInput(e, 'reEdgeStart')}/>
+            <Input placeholder="终止点" value={reEdgeTarget} onChange={(e) => this.handleInput(e, 'reEdgeTarget')}/>
             <Button type="primary" onClick={this.handleRemoveEdge}>删除边</Button>
           </div>
         </div>
