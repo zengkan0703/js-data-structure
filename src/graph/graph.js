@@ -189,4 +189,24 @@ export default class Graph {
       callback && callback(vertex);
     }
   }
+  dfs(callback) {
+    this.reset();
+    this.vertexs.map(v => {
+      if (v.status === UNDISCOVERED) {
+        this._dfs(v, callback)
+      }
+    })
+  }
+  _dfs(v, callback) {
+    v.status = DISCOVERED;
+    callback && callback(v);
+    console.log(v.key, 'key 555')
+    v.edges.map(e => {
+      const target = this.vertexs.find(v => v.key === e.target);
+      if (target.status === UNDISCOVERED) {
+        this._dfs(target, callback);
+      };
+    })
+    v.status = VISITED;
+  }
 }
