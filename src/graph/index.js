@@ -14,11 +14,22 @@ export default class AdjacencyMatrix extends Component {
     graph.insertVertex('B');
     graph.insertVertex('C');
     graph.insertVertex('D');
+    graph.insertVertex('E');
+    graph.insertVertex('F');
+    graph.insertVertex('G');
+    graph.insertVertex('H');
+    graph.insertVertex('I');
 
     graph.insertEdge('edge1', 1, 'A', 'B');
-    graph.insertEdge('edge2', 1, 'C', 'D');
-    graph.insertEdge('edge3', 1, 'B', 'C');
-    graph.insertEdge('edge4', 1, 'A', 'D');
+    graph.insertEdge('edge2', 1, 'A', 'C');
+    graph.insertEdge('edge3', 1, 'A', 'D');
+    graph.insertEdge('edge4', 1, 'C', 'D');
+    graph.insertEdge('edge5', 1, 'C', 'G');
+    graph.insertEdge('edge6', 1, 'D', 'G');
+    graph.insertEdge('edge7', 1, 'D', 'H');
+    graph.insertEdge('edge8', 1, 'B', 'E');
+    graph.insertEdge('edge9', 1, 'B', 'F');
+    graph.insertEdge('edge10', 1, 'E', 'I');
     this.state = {
       graph,
       addVerKey: void 0,
@@ -88,6 +99,7 @@ export default class AdjacencyMatrix extends Component {
     const { graph } = this.state;
     const { vertexs } = graph;
     const { addVerKey, addEdgeStart, addEdgeTarget, reVerKey, reEdgeStart, reEdgeTarget } = this.state;
+    window.graph = graph
     return (
       <div className="adjacency-matric">
         <h2 className="title">邻接表--表示图</h2>
