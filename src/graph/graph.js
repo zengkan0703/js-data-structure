@@ -189,6 +189,7 @@ export default class Graph {
       callback && callback(vertex);
     }
   }
+  //深度优先搜索递归版
   dfs(callback) {
     this.reset();
     this.vertexs.map(v => {
@@ -208,5 +209,28 @@ export default class Graph {
       };
     })
     v.status = VISITED;
+  }
+  //深度优先搜索迭代版
+  dfs2(){
+    this.reset();
+    const arr = [];
+
+    this.vertexs.map(v => {
+      if (v.status === UNDISCOVERED) {
+        arr.push(v);
+        while(arr.length) {
+          const vertex = arr.pop();
+          vertex.status = DISCOVERED;
+          console.log(vertex.key, 'key 555')
+          vertex.edges.map(e => {
+            const target = this.vertexs.find(v => v.key === e.target);
+            if (target.status === UNDISCOVERED) {
+              arr.push(target)
+            };
+          })
+          vertex.status = VISITED
+        }
+      }
+    })
   }
 }
