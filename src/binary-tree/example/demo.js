@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import zrender from 'zrender';
-
 import Tree from '../tree';
 
 import './style';
@@ -16,13 +15,20 @@ export default class TreeEle extends Component {
     this.zr = null;
     this.tree = new Tree([500]);
     this.clear = false;
+    this.promiseIdx = 0;
     this.state = {
-      values: []
+      values: [],
+      nodes: []
     }
   }
   componentDidMount() {
     this.zr = zrender.init(this.treeEle);   
     this.start();
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.nodes !== this.state.nodes) {
+      this.updateValues();
+    }
   }
   start = () => {
     this.interval = setInterval(this.add, 20)
@@ -39,6 +45,7 @@ export default class TreeEle extends Component {
     this.setState({
       values: []
     })
+    this.promiseIdx = 0;
   }
   add = () => {
     if (this.clear) {
@@ -140,13 +147,19 @@ export default class TreeEle extends Component {
         shape: {
           cx: node.cx, cy: node.cy, r: 0
         }
-      }, 300, 200)
+      }, 300, 200, () => {
+        circle.style.text = "";
+      })
       this.zr.add(circle);
     })
   }  
-  updateValues = (node) => {
-    return new Promise(resolve => {
+  updateValue = (node, idx) => {
+    return new Promise((resolve, reject) => {
       setTimeout(() => {
+        // 如果当前 promise 的 idx 和 this.promiseIdx，表示已经出现新的遍历，此次遍历已经失效
+        if (this.promiseIdx !== idx) {
+          reject();
+        }
         this.highLightNode(node)
         this.setState((state) => ({
           values: [...state.values, ...(Array.isArray(node) ? node.map(d => d.value) : [node.value])]
@@ -154,18 +167,41 @@ export default class TreeEle extends Component {
       }, 300)
     })
   }
-  trav = (type) => {
-    this.setState({
-      values: []
-    }, async () => {
-      const nodes = [];
-      this.tree[type](node => nodes.push(node))
+  updateValues = async () => {
+    this.promiseIdx++;
+    let promise = null;
+    const { nodes } = this.state;
+    ;((idx) => {
+      // 形成局部作用域，避免多次遍历时候 idx 混淆，让 idx 准确表示当前的操作是在哪次遍历
       for (let i = 0, length = nodes.length; i < length; i++) {
-        if (!this.clear) {
-          await this.updateValues(nodes[i])
-        }
+        promise = promise ? promise.then(() => {
+          return this.updateValue(nodes[i], idx)
+        }) : this.updateValue(nodes[i], idx)
       }
+    })(this.promiseIdx);
+    promise.catch(() => {
+      console.log("catch")
+    });
+  }
+  trav = async (type) => {
+    const nodes = [];
+    this.tree[type](node => nodes.push(node))
+    this.setState({
+      nodes,
+      values: []
     })
+  }
+  travPre = () => {
+    this.trav("travPre")
+  }
+  travIn = () => {
+    this.trav("travIn")
+  }
+  travPost = () => {
+    this.trav("travPost")
+  }
+  travLevel = () => {
+    this.trav("travLevel")
   }
   render() {
     const { values } = this.state;
@@ -177,10 +213,10 @@ export default class TreeEle extends Component {
           <span onClick={this.handleClear}>清空</span>
           <span onClick={this.add}>随机加1</span>
 
-          <span onClick={() => this.trav('travPre')}>先序遍历</span>  
-          <span onClick={() => this.trav('travIn')}>中序遍历</span>  
-          <span onClick={() => this.trav('travPost')}>后序遍历</span>  
-          <span onClick={() => this.trav('travLevel')}>层级遍历</span>  
+          <span onClick={this.travPre}>先序遍历</span>  
+          <span onClick={this.travIn}>中序遍历</span>  
+          <span onClick={this.travPost}>后序遍历</span>  
+          <span onClick={this.travLevel}>层级遍历</span>  
         </div>
         <div className="values">{values.join()}</div>
       </div>
